@@ -1,0 +1,624 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CBT SPADA - SMP Negeri 2 Patuk</title>
+<style>
+:root {
+  --blue:#1457d9;
+  --blue2:#2878f0;
+  --navy:#10264d;
+  --yellow:#ffc928;
+  --bg:#f3f6fc;
+  --text:#18243b;
+  --muted:#71809b;
+  --white:#fff;
+  --border:#e7ecf4;
+  --green:#16a36a;
+  --red:#e34e5b;
+  --shadow:0 12px 35px rgba(28,55,105,.09);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+#loginPage{
+ min-height:100vh;display:grid;grid-template-columns:1.1fr .9fr;
+ background:linear-gradient(135deg,#103f9f,#2878ef);
+}
+.login-banner{
+ color:white;padding:70px 9%;display:flex;flex-direction:column;
+ justify-content:center;position:relative;overflow:hidden;
+}
+.login-banner:before,.login-banner:after{
+ content:"";position:absolute;border-radius:50%;background:#ffffff12;
+ width:380px;height:380px;right:-100px;top:-100px
+}
+.login-banner:after{width:250px;height:250px;right:20px;top:auto;bottom:-130px}
+.brand-mark{
+ width:66px;height:66px;border-radius:20px;background:var(--yellow);
+ color:#173d8a;display:grid;place-items:center;font-size:28px;font-weight:900;
+ box-shadow:0 8px 25px #071d5540
+}
+.login-banner h1{font-size:clamp(36px,5vw,60px);line-height:1.08;margin:28px 0 15px}
+.login-banner p{font-size:17px;line-height:1.8;color:#e3edff;max-width:520px}
+.login-features{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.login-features span{background:#ffffff18;border:1px solid #ffffff35;padding:10px 15px;border-radius:30px;font-size:13px}
+.login-panel{background:white;display:flex;align-items:center;justify-content:center;padding:35px}
+.login-card{width:100%;max-width:420px}
+.login-card h2{font-size:29px;margin:0 0 8px}
+.sub{color:var(--muted);margin:0 0 28px;line-height:1.6}
+.field{margin:17px 0}
+.field label{display:block;font-size:13px;font-weight:700;margin-bottom:8px}
+.field input,.field select,.field textarea{
+ width:100%;border:1px solid var(--border);border-radius:12px;padding:13px 14px;
+ outline:none;background:#fbfcff;color:var(--text)
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px #1457d91a}
+.btn{
+ border:0;border-radius:11px;padding:12px 18px;font-weight:700;
+ background:var(--blue);color:white;transition:.2s
+}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn:disabled{opacity:.6;cursor:wait;transform:none}
+.btn-yellow{background:var(--yellow);color:#20345d}
+.btn-light{background:#edf3ff;color:var(--blue)}
+.btn-danger{background:#fff0f1;color:var(--red)}
+.btn-block{width:100%;padding:14px}
+.login-note{font-size:12px;color:#96a1b4;text-align:center;margin-top:25px}
+#app{min-height:100vh}
+.topbar{
+ height:70px;background:white;border-bottom:1px solid var(--border);
+ display:flex;align-items:center;justify-content:space-between;padding:0 28px;
+ position:sticky;top:0;z-index:10
+}
+.top-brand{display:flex;align-items:center;gap:11px;font-weight:900;color:var(--navy)}
+.top-logo{width:38px;height:38px;border-radius:12px;background:var(--blue);color:white;display:grid;place-items:center}
+.top-right{display:flex;align-items:center;gap:15px}
+.user-chip{display:flex;align-items:center;gap:10px}
+.avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#eaf1ff;color:var(--blue);font-weight:900}
+.user-name{font-size:13px;font-weight:800}
+.user-role{font-size:11px;color:var(--muted);margin-top:3px}
+.layout{display:flex;min-height:calc(100vh - 70px)}
+.sidebar{width:245px;background:white;border-right:1px solid var(--border);padding:22px 14px;flex-shrink:0}
+.side-label{font-size:10px;color:#9aa6ba;font-weight:900;letter-spacing:1.3px;padding:10px 12px}
+.nav-btn{
+ width:100%;display:flex;align-items:center;gap:12px;border:0;
+ padding:12px 13px;background:transparent;border-radius:11px;
+ color:#66748d;font-weight:700;text-align:left;margin:3px 0
+}
+.nav-btn:hover{background:#f1f5ff;color:var(--blue)}
+.nav-btn.active{background:#eaf1ff;color:var(--blue)}
+.nav-icon{width:22px;text-align:center;font-size:17px}
+.main{flex:1;min-width:0;padding:30px;max-width:1600px;margin:auto;width:100%}
+.page-head{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:25px;flex-wrap:wrap}
+.page-head h1{font-size:25px;margin:0 0 6px}
+.page-head p{margin:0;color:var(--muted);font-size:13px}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:17px;margin-bottom:24px}
+.stat-card,.panel{background:white;border:1px solid var(--border);border-radius:17px;padding:20px;box-shadow:var(--shadow)}
+.stat-top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px;font-weight:700}
+.stat-icon{width:42px;height:42px;border-radius:13px;background:#edf3ff;display:grid;place-items:center;font-size:20px}
+.stat-value{font-size:29px;font-weight:900;margin-top:14px;color:var(--navy)}
+.stat-foot{font-size:11px;color:#97a3b7;margin-top:5px}
+.panel{margin-bottom:20px}
+.panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:17px;flex-wrap:wrap}
+.panel-head h3{margin:0;font-size:16px}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:600px}
+th,td{text-align:left;padding:13px 12px;border-bottom:1px solid #edf0f6;font-size:13px}
+th{font-size:11px;color:#8793a8;text-transform:uppercase;letter-spacing:.5px;background:#fafbfe}
+td{color:#4b5870}
+.pill{display:inline-block;padding:5px 9px;border-radius:30px;font-size:11px;font-weight:800;background:#eaf8f1;color:#138354}
+.pill.off{background:#fff0f1;color:#d34b57}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}
+.form-grid .full{grid-column:1/-1}
+.empty{padding:35px;text-align:center;color:#96a1b4;font-size:13px}
+.notice{padding:13px 15px;border-radius:12px;background:#edf4ff;color:#2858a5;font-size:13px;line-height:1.6;margin-bottom:18px}
+.toast{
+ position:fixed;bottom:22px;right:22px;z-index:50;padding:14px 18px;
+ background:#172b4d;color:white;border-radius:12px;box-shadow:var(--shadow);
+ max-width:min(380px,90vw);font-size:13px
+}
+.mobile-menu{display:none}
+.footer{text-align:center;color:#a0aabc;font-size:11px;padding:25px}
+@media(max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){
+ #loginPage{grid-template-columns:1fr}
+ .login-banner{padding:35px 8%;min-height:260px}
+ .login-banner h1{font-size:34px;margin:18px 0 8px}
+ .login-banner p{font-size:14px;margin:0}
+ .login-features{display:none}
+ .login-panel{padding:35px 22px}
+ .topbar{padding:0 15px}
+ .sidebar{display:none;position:fixed;z-index:20;top:70px;bottom:0;left:0;width:260px;box-shadow:var(--shadow)}
+ .sidebar.open{display:block}
+ .mobile-menu{display:inline-block}
+ .main{padding:20px 14px}
+ .cards{gap:10px}
+ .stat-card{padding:14px}
+ .stat-value{font-size:24px}
+ .form-grid{grid-template-columns:1fr}
+ .form-grid .full{grid-column:auto}
+ .user-name{max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<section id="loginPage">
+ <div class="login-banner">
+  <div class="brand-mark">S</div>
+  <h1>CBT SPADA</h1>
+  <p>Sistem Computer Based Test SMP Negeri 2 Patuk. Platform ujian digital yang mudah, terintegrasi, dan membantu proses evaluasi pembelajaran.</p>
+  <div class="login-features">
+   <span>✦ Ujian Online</span>
+   <span>✦ Penilaian Otomatis</span>
+   <span>✦ Rekap Hasil</span>
+  </div>
+ </div>
+ <div class="login-panel">
+  <div class="login-card">
+   <h2>Selamat Datang!</h2>
+   <p class="sub">Silakan masuk menggunakan akun CBT SPADA Anda.</p>
+   <form id="loginForm">
+    <div class="field">
+     <label>Username</label>
+     <input id="username" autocomplete="username" required placeholder="Masukkan username">
+    </div>
+    <div class="field">
+     <label>Password</label>
+     <input id="password" type="password" autocomplete="current-password" required placeholder="Masukkan password">
+    </div>
+    <button class="btn btn-block" id="loginBtn">Masuk ke Sistem →</button>
+   </form>
+   <div class="login-note">CBT SPADA · SMP NEGERI 2 PATUK</div>
+  </div>
+ </div>
+</section>
+
+<!-- APPLICATION -->
+<section id="app" class="hidden">
+ <header class="topbar">
+  <div style="display:flex;align-items:center;gap:12px">
+   <button class="btn btn-light mobile-menu" onclick="toggleSidebar()">☰</button>
+   <div class="top-brand"><div class="top-logo">S</div><span>CBT SPADA</span></div>
+  </div>
+  <div class="top-right">
+   <div class="user-chip">
+    <div class="avatar" id="userAvatar">A</div>
+    <div><div class="user-name" id="userName">Administrator</div><div class="user-role" id="userRole">ADMIN</div></div>
+   </div>
+   <button class="btn btn-light" onclick="logout()">Keluar</button>
+  </div>
+ </header>
+
+ <div class="layout">
+  <aside class="sidebar" id="sidebar">
+   <div class="side-label">MENU UTAMA</div>
+   <div id="navMenu"></div>
+   <div class="side-label" style="margin-top:25px">LAINNYA</div>
+   <button class="nav-btn" onclick="openPage('pengumuman')"><span class="nav-icon">📢</span>Pengumuman</button>
+  </aside>
+
+  <main class="main">
+   <div id="pageContent"></div>
+   <div class="footer">CBT SPADA · SMP NEGERI 2 PATUK · Luar Biasa Istimewa Pasti Bisa</div>
+  </main>
+ </div>
+</section>
+
+<div id="toast" class="toast hidden"></div>
+
+<!-- API BRIDGE: form + iframe -->
+<iframe name="cbtApiFrame" id="cbtApiFrame" style="display:none"></iframe>
+<form id="apiForm" method="POST" target="cbtApiFrame" style="display:none">
+ <input type="hidden" name="payload" id="apiPayload">
+ <input type="hidden" name="nonce" id="apiNonce">
+</form>
+
+<script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbxyu8EyQA3Oo1WM4rUnxGgm9wigFQxvseaQHHC5ZkZrbwR3l78Xp06qL2cgSPs-9qLx/exec';
+
+let authToken = sessionStorage.getItem('cbt_token') || '';
+let currentUser = null;
+let activePage = 'dashboard';
+let pendingRequests = {};
+let requestTimer = {};
+
+const MENUS = {
+ admin: [
+  ['dashboard','▦','Dashboard'],
+  ['akun','👥','Kelola Akun'],
+  ['siswa','🎓','Data Siswa'],
+  ['guru','👨‍🏫','Data Guru'],
+  ['soal','📝','Bank Soal'],
+  ['ujian','📋','Buat / Daftar Ujian'],
+  ['hasil','📊','Hasil Ujian']
+ ],
+ guru: [
+  ['dashboard','▦','Dashboard'],
+  ['soal','📝','Bank Soal'],
+  ['ujian','📋','Daftar Ujian'],
+  ['hasil','📊','Hasil Ujian']
+ ],
+ siswa: [
+  ['dashboard','▦','Dashboard'],
+  ['ujian','📋','Ujian Saya'],
+  ['hasilSaya','🏆','Hasil Ujian']
+ ]
+};
+
+function api(action,data={}) {
+ return new Promise((resolve,reject)=>{
+  const nonce = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())+Math.random());
+  const payload = {action,data,token:authToken};
+
+  const timer = setTimeout(()=>{
+   delete pendingRequests[nonce];
+   reject(new Error('Waktu koneksi habis. Periksa deployment Apps Script dan koneksi internet.'));
+  },25000);
+
+  pendingRequests[nonce] = response=>{
+   clearTimeout(timer);
+   delete pendingRequests[nonce];
+   if(response && response.success) resolve(response.data);
+   else reject(new Error(response?.error || 'Terjadi kesalahan pada server.'));
+  };
+
+  document.getElementById('apiForm').action = API_URL;
+  document.getElementById('apiPayload').value = JSON.stringify(payload);
+  document.getElementById('apiNonce').value = nonce;
+  document.getElementById('apiForm').submit();
+ });
+}
+
+window.addEventListener('message',event=>{
+ const msg = event.data;
+ if(!msg || msg.type !== 'CBT_SPADA_RESPONSE' || !msg.nonce) return;
+ const callback = pendingRequests[msg.nonce];
+ if(callback) callback(msg.response);
+});
+
+function toast(message) {
+ const el=document.getElementById('toast');
+ el.textContent=message;el.classList.remove('hidden');
+ clearTimeout(window.toastTimer);
+ window.toastTimer=setTimeout(()=>el.classList.add('hidden'),3500);
+}
+
+function esc(value) {
+ return String(value ?? '').replace(/[&<>"']/g,c=>({
+  '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+ }[c]));
+}
+
+document.getElementById('loginForm').addEventListener('submit',async e=>{
+ e.preventDefault();
+ const btn=document.getElementById('loginBtn');
+ btn.disabled=true;btn.textContent='Memeriksa akun...';
+ try{
+  const result=await api('login',{
+   username:document.getElementById('username').value.trim(),
+   password:document.getElementById('password').value
+  });
+  authToken=result.token;
+  sessionStorage.setItem('cbt_token',authToken);
+  currentUser=result.user;
+  showApp();
+ }catch(err){toast(err.message);}
+ finally{btn.disabled=false;btn.textContent='Masuk ke Sistem →';}
+});
+
+async function showApp(){
+ document.getElementById('loginPage').classList.add('hidden');
+ document.getElementById('app').classList.remove('hidden');
+ document.getElementById('userName').textContent=currentUser.nama;
+ document.getElementById('userRole').textContent=currentUser.role.toUpperCase();
+ document.getElementById('userAvatar').textContent=(currentUser.nama||'U').charAt(0).toUpperCase();
+ renderMenu();
+ await openPage('dashboard');
+}
+
+function renderMenu(){
+ const menus=MENUS[currentUser.role]||[];
+ document.getElementById('navMenu').innerHTML=menus.map(m=>`
+  <button class="nav-btn ${activePage===m[0]?'active':''}" onclick="openPage('${m[0]}')">
+   <span class="nav-icon">${m[1]}</span>${m[2]}
+  </button>`).join('');
+}
+
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');}
+
+function pageHead(title,subtitle,action=''){
+ return `<div class="page-head"><div><h1>${title}</h1><p>${subtitle}</p></div>${action}</div>`;
+}
+
+async function openPage(page){
+ activePage=page;renderMenu();
+ document.getElementById('sidebar').classList.remove('open');
+ const el=document.getElementById('pageContent');
+ el.innerHTML='<div class="panel empty">Memuat data...</div>';
+
+ try{
+  if(page==='dashboard') return await pageDashboard();
+  if(page==='akun') return await pageAccounts();
+  if(page==='siswa') return await pageStudents();
+  if(page==='guru') return await pageTeachers();
+  if(page==='soal') return await pageQuestions();
+  if(page==='ujian') return await pageExams();
+  if(page==='hasil') return await pageResults();
+  if(page==='hasilSaya') return await pageMyResults();
+  if(page==='pengumuman') return await pageAnnouncements();
+  el.innerHTML='<div class="panel empty">Menu belum tersedia.</div>';
+ }catch(err){
+  el.innerHTML=`<div class="panel"><h3>Gagal memuat data</h3><p>${esc(err.message)}</p><button class="btn" onclick="openPage('${page}')">Coba Lagi</button></div>`;
+ }
+}
+
+async function pageDashboard(){
+ const d=await api('dashboard');
+ let stats=[];
+ if(currentUser.role==='admin') stats=[
+  ['Jumlah Siswa',d.jumlahSiswa,'🎓'],['Jumlah Guru',d.jumlahGuru,'👨‍🏫'],
+  ['Bank Soal',d.jumlahSoal,'📝'],['Jumlah Ujian',d.jumlahUjian,'📋']
+ ];
+ if(currentUser.role==='guru') stats=[
+  ['Ujian Dibuat',d.jumlahUjian,'📋'],['Bank Soal Saya',d.jumlahSoal,'📝'],
+  ['Hasil Masuk',d.jumlahHasil,'📊']
+ ];
+ if(currentUser.role==='siswa') stats=[
+  ['Ujian Tersedia',d.jumlahUjian,'📋'],['Ujian Selesai',d.ujianSelesai,'🏆'],
+  ['Rata-rata Nilai',d.rataRata,'⭐']
+ ];
+ document.getElementById('pageContent').innerHTML=
+ pageHead('Dashboard','Selamat datang di CBT SPADA, '+esc(currentUser.nama)+'.')+
+ `<div class="cards">${stats.map(s=>`
+  <div class="stat-card"><div class="stat-top">${s[0]}<div class="stat-icon">${s[2]}</div></div>
+  <div class="stat-value">${s[1]??0}</div><div class="stat-foot">Data sistem CBT SPADA</div></div>`).join('')}</div>`+
+ `<div class="panel"><div class="panel-head"><h3>Selamat datang!</h3></div>
+ <p style="color:#71809b;line-height:1.8;font-size:14px">Gunakan menu di sebelah kiri untuk mengakses fitur sesuai hak akses akun Anda. Pastikan data dan aktivitas ujian dilakukan dengan benar.</p></div>`;
+}
+
+async function pageAccounts(){
+ const users=await api('daftarAkun');
+ document.getElementById('pageContent').innerHTML=
+ pageHead('Kelola Akun','Tambah dan pantau akun guru serta siswa.')+
+ `<div class="panel"><div class="panel-head"><h3>Tambah Akun Baru</h3></div>
+ <form id="accountForm"><div class="form-grid">
+  <div class="field"><label>Username</label><input name="username" required></div>
+  <div class="field"><label>Password (minimal 10 karakter)</label><input name="password" type="password" minlength="10" required></div>
+  <div class="field"><label>Nama Lengkap</label><input name="nama" required></div>
+  <div class="field"><label>Peran</label><select name="role"><option value="siswa">Siswa</option><option value="guru">Guru</option></select></div>
+  <div class="field"><label>NIS / NIP</label><input name="refId" required></div>
+  <div class="field"><label>Kelas (khusus siswa)</label><input name="kelas" placeholder="Contoh: 8A"></div>
+  <div class="field full"><label>Mata Pelajaran (khusus guru)</label><input name="mapel" placeholder="Contoh: Informatika"></div>
+ </div><button class="btn">+ Simpan Akun</button></form></div>
+ <div class="panel"><div class="panel-head"><h3>Daftar Akun (${users.length})</h3></div>
+ <div class="table-wrap"><table><thead><tr><th>Username</th><th>Nama</th><th>Peran</th><th>ID</th><th>Kelas</th><th>Status</th></tr></thead><tbody>
+ ${users.map(u=>`<tr><td>${esc(u.username)}</td><td>${esc(u.nama)}</td><td>${esc(u.role)}</td><td>${esc(u.refId)}</td><td>${esc(u.kelas)}</td><td><span class="pill ${u.aktif?'':'off'}">${u.aktif?'Aktif':'Nonaktif'}</span></td></tr>`).join('')}
+ </tbody></table></div></div>`;
+
+ document.getElementById('accountForm').onsubmit=async e=>{
+  e.preventDefault();const f=new FormData(e.target);
+  const data=Object.fromEntries(f.entries());
+  try{await api('buatAkun',data);toast('Akun berhasil dibuat.');pageAccounts();}
+  catch(err){toast(err.message);}
+ };
+}
+
+async function pageStudents(){
+ const data=await api('daftarSiswa');
+ document.getElementById('pageContent').innerHTML=
+ pageHead('Data Siswa','Daftar siswa yang tersimpan dalam database.')+
+ `<div class="panel"><div class="panel-head"><h3>Daftar Siswa (${data.length})</h3></div>
+ <div class="table-wrap"><table><thead><tr><th>No.</th><th>NIS</th><th>Nama</th><th>Kelas</th><th>Status</th></tr></thead><tbody>
+ ${data.map((s,i)=>`<tr><td>${i+1}</td><td>${esc(s.nis)}</td><td>${esc(s.nama)}</td><td>${esc(s.kelas)}</td><td><span class="pill ${s.aktif?'':'off'}">${s.aktif?'Aktif':'Nonaktif'}</span></td></tr>`).join('')}
+ </tbody></table></div></div>`;
+}
+
+async function pageTeachers(){
+ const data=await api('daftarGuru');
+ document.getElementById('pageContent').innerHTML=
+ pageHead('Data Guru','Daftar guru yang terdaftar di sistem.')+
+ `<div class="panel"><div class="panel-head"><h3>Daftar Guru (${data.length})</h3></div>
+ <div class="table-wrap"><table><thead><tr><th>No.</th><th>NIP</th><th>Nama</th><th>Mata Pelajaran</th><th>Status</th></tr></thead><tbody>
+ ${data.map((g,i)=>`<tr><td>${i+1}</td><td>${esc(g.nip)}</td><td>${esc(g.nama)}</td><td>${esc(g.mapel)}</td><td><span class="pill ${g.aktif?'':'off'}">${g.aktif?'Aktif':'Nonaktif'}</span></td></tr>`).join('')}
+ </tbody></table></div></div>`;
+}
+
+async function pageQuestions(){
+ const data=await api('daftarSoal');
+ document.getElementById('pageContent').innerHTML=
+ pageHead('Bank Soal','Buat dan lihat soal pilihan ganda.')+
+ `<div class="panel"><div class="panel-head"><h3>Tambah Soal Pilihan Ganda</h3></div>
+ <form id="questionForm"><div class="form-grid">
+  <div class="field"><label>Mata Pelajaran</label><input name="mapel" required></div>
+  <div class="field"><label>Kelas</label><input name="kelas" placeholder="Contoh: 8A" required></div>
+  <div class="field full"><label>Pertanyaan</label><textarea name="pertanyaan" rows="3" required></textarea></div>
+  ${['a','b','c','d'].map(x=>`<div class="field"><label>Opsi ${x.toUpperCase()}</label><input name="${x}" required></div>`).join('')}
+  <div class="field"><label>Kunci Jawaban</label><select name="kunci"><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+  <div class="field"><label>Bobot</label><input name="bobot" type="number" min="1" value="1" required></div>
+ </div><button class="btn">Simpan Soal</button></form></div>
+ <div class="panel"><div class="panel-head"><h3>Daftar Soal (${data.length})</h3></div>
+ <div class="table-wrap"><table><thead><tr><th>ID</th><th>Mapel</th><th>Kelas</th><th>Pertanyaan</th><th>Bobot</th></tr></thead><tbody>
+ ${data.map(q=>`<tr><td>${esc(q.id)}</td><td>${esc(q.mapel)}</td><td>${esc(q.kelas)}</td><td>${esc(q.pertanyaan)}</td><td>${esc(q.bobot)}</td></tr>`).join('')}
+ </tbody></table></div></div>`;
+
+ document.getElementById('questionForm').onsubmit=async e=>{
+  e.preventDefault();const data=Object.fromEntries(new FormData(e.target).entries());
+  try{await api('buatSoal',data);toast('Soal berhasil disimpan.');pageQuestions();}
+  catch(err){toast(err.message);}
+ };
+}
+
+async function pageExams(){
+ const data=await api('daftarUjian');
+ const isStudent=currentUser.role==='siswa';
+ let form='';
+ if(!isStudent){
+  const questions=currentUser.role==='admin'?await api('daftarSoal'):[];
+  form=`<div class="panel"><div class="panel-head"><h3>Buat Ujian</h3></div>
+  <form id="examForm"><div class="form-grid">
+   <div class="field"><label>Nama Ujian</label><input name="nama" required></div>
+   <div class="field"><label>Mata Pelajaran</label><input name="mapel" required></div>
+   <div class="field"><label>Kelas</label><input name="kelas" placeholder="Contoh: 8A" required></div>
+   <div class="field"><label>Durasi (menit)</label><input name="durasi" type="number" min="1" required></div>
+   <div class="field"><label>Waktu Mulai</label><input name="mulai" type="datetime-local" required></div>
+   <div class="field"><label>Waktu Selesai</label><input name="selesai" type="datetime-local" required></div>
+   <div class="field"><label>Token Ujian (opsional)</label><input name="token"></div>
+   <div class="field"><label>ID Soal (pisahkan koma)</label><input name="soalIds" placeholder="Masukkan ID soal" required></div>
+  </div><div class="notice">Gunakan ID soal yang sesuai dengan mapel dan kelas. Untuk guru, gunakan soal yang dibuat oleh akun guru tersebut.</div>
+  <button class="btn">Buat Ujian</button></form></div>`;
+ }
+ document.getElementById('pageContent').innerHTML=
+ pageHead(isStudent?'Ujian Saya':'Buat / Daftar Ujian',isStudent?'Daftar ujian untuk kelas Anda.':'Kelola jadwal ujian dan daftar ujian.')+
+ form+`<div class="panel"><div class="panel-head"><h3>Daftar Ujian (${data.length})</h3></div>
+ <div class="table-wrap"><table><thead><tr><th>Nama Ujian</th><th>Mapel</th><th>Kelas</th><th>Mulai</th><th>Selesai</th><th>Status</th>${isStudent?'<th>Aksi</th>':''}</tr></thead><tbody>
+ ${data.map(e=>`<tr><td>${esc(e.nama)}</td><td>${esc(e.mapel)}</td><td>${esc(e.kelas)}</td><td>${formatDate(e.mulai)}</td><td>${formatDate(e.selesai)}</td><td>${esc(e.status)}</td>${isStudent?`<td><button class="btn" onclick="startExam('${esc(e.id)}')">Mulai</button></td>`:''}</tr>`).join('')}
+ </tbody></table></div></div>`;
+
+ if(!isStudent)document.getElementById('examForm').onsubmit=async e=>{
+  e.preventDefault();const f=Object.fromEntries(new FormData(e.target).entries());
+  f.soalIds=f.soalIds.split(',').map(x=>x.trim()).filter(Boolean);
+  try{await api('buatUjian',f);toast('Ujian berhasil dibuat.');pageExams();}
+  catch(err){toast(err.message);}
+ };
+}
+
+function formatDate(value){
+ if(!value)return '-';
+ const d=new Date(value);
+ return isNaN(d)?esc(value):d.toLocaleString('id-ID');
+}
+
+async function startExam(id){
+ if(!confirm('Mulai ujian sekarang? Pastikan koneksi internet stabil.'))return;
+ try{
+  const result=await api('mulaiUjian',{ujianId:id});
+  renderExam(result,id);
+ }catch(err){toast(err.message);}
+}
+
+function renderExam(result,examId){
+ let answers={};
+ const questions=result.questions||[];
+ let current=0;
+ const deadline=new Date(result.batasWaktu).getTime();
+ const el=document.getElementById('pageContent');
+
+ function draw(){
+  const q=questions[current];
+  if(!q){el.innerHTML='<div class="panel empty">Tidak ada soal dalam ujian ini.</div>';return;}
+  const remain=Math.max(0,Math.floor((deadline-Date.now())/1000));
+  const mm=String(Math.floor(remain/60)).padStart(2,'0');
+  const ss=String(remain%60).padStart(2,'0');
+
+  el.innerHTML=pageHead('Mengerjakan Ujian','Jawaban disimpan otomatis.')+
+  `<div class="notice">Sisa waktu: <b id="examClock">${mm}:${ss}</b> · Soal ${current+1} dari ${questions.length}</div>
+  <div class="panel"><div class="panel-head"><h3>Nomor ${current+1}</h3><span class="pill">${esc(q.bobot)} poin</span></div>
+  <p style="line-height:1.8;font-size:16px">${esc(q.pertanyaan)}</p>
+  ${['a','b','c','d'].map(x=>`<label style="display:flex;gap:12px;padding:13px;border:1px solid var(--border);border-radius:12px;margin:10px 0;cursor:pointer">
+   <input type="radio" name="answer" value="${x.toUpperCase()}" ${answers[q.id]===x.toUpperCase()?'checked':''}>
+   <span><b>${x.toUpperCase()}.</b> ${esc(q[x])}</span></label>`).join('')}
+  <div style="display:flex;justify-content:space-between;gap:10px;margin-top:25px">
+   <button class="btn btn-light" id="prevQ" ${current===0?'disabled':''}>← Sebelumnya</button>
+   <button class="btn" id="nextQ">${current===questions.length-1?'Selesai':'Berikutnya →'}</button>
+  </div></div>`;
+
+  el.querySelectorAll('input[name="answer"]').forEach(input=>{
+   input.onchange=async()=>{
+    answers[q.id]=input.value;
+    try{await api('simpanJawaban',{attemptId:result.attemptId,questionId:q.id,jawaban:input.value});}
+    catch(err){toast('Gagal menyimpan jawaban: '+err.message);}
+   };
+  });
+  document.getElementById('prevQ').onclick=()=>{current--;draw();};
+  document.getElementById('nextQ').onclick=async()=>{
+   if(current<questions.length-1){current++;draw();}
+   else if(confirm('Kumpulkan ujian sekarang?')){
+    try{
+     const score=await api('kumpulkanUjian',{attemptId:result.attemptId});
+     el.innerHTML=pageHead('Ujian Selesai','Jawaban berhasil dikumpulkan.')+
+      `<div class="panel" style="text-align:center"><div style="font-size:50px">🏆</div><h2>Nilai Anda: ${score.nilai}</h2><p>Benar: ${score.benar} · Salah: ${score.salah} · Kosong: ${score.kosong}</p><button class="btn" onclick="openPage('hasilSaya')">Lihat Hasil</button></div>`;
+    }catch(err){toast(err.message);}
+   }
+  };
+ }
+
+ draw();
+ const interval=setInterval(async()=>{
+  const remain=Math.max(0,Math.floor((deadline-Date.now())/1000));
+  const clock=document.getElementById('examClock');
+  if(clock)clock.textContent=String(Math.floor(remain/60)).padStart(2,'0')+':'+String(remain%60).padStart(2,'0');
+  if(remain<=0){
+   clearInterval(interval);
+   try{await api('kumpulkanUjian',{attemptId:result.attemptId});toast('Waktu habis. Ujian dikumpulkan.');openPage('hasilSaya');}
+   catch(err){toast(err.message);}
+  }
+ },1000);
+}
+
+async function pageResults(){
+ const data=await api('hasilUjian');
+ document.getElementById('pageContent').innerHTML=
+ pageHead('Hasil Ujian','Rekap nilai seluruh peserta ujian.')+
+ `<div class="panel"><div class="panel-head"><h3>Rekap Hasil (${data.length})</h3></div>
+ <div class="table-wrap"><table><thead><tr><th>NIS</th><th>Nama</th><th>Kelas</th><th>Mapel</th><th>Nilai</th><th>Benar</th><th>Salah</th><th>Kosong</th></tr></thead><tbody>
+ ${data.map(r=>`<tr><td>${esc(r.nis)}</td><td>${esc(r.nama)}</td><td>${esc(r.kelas)}</td><td>${esc(r.mapel)}</td><td><b>${esc(r.nilai)}</b></td><td>${esc(r.benar)}</td><td>${esc(r.salah)}</td><td>${esc(r.kosong)}</td></tr>`).join('')}
+ </tbody></table></div></div>`;
+}
+
+async function pageMyResults(){
+ const data=await api('hasilSaya');
+ document.getElementById('pageContent').innerHTML=
+ pageHead('Hasil Ujian Saya','Riwayat hasil ujian Anda.')+
+ `<div class="panel"><div class="panel-head"><h3>Riwayat Nilai</h3></div>
+ <div class="table-wrap"><table><thead><tr><th>Mapel</th><th>Nilai</th><th>Benar</th><th>Salah</th><th>Kosong</th><th>Tanggal</th></tr></thead><tbody>
+ ${data.map(r=>`<tr><td>${esc(r.mapel)}</td><td><b>${esc(r.nilai)}</b></td><td>${esc(r.benar)}</td><td>${esc(r.salah)}</td><td>${esc(r.kosong)}</td><td>${formatDate(r.waktuSelesai)}</td></tr>`).join('')}
+ </tbody></table></div></div>`;
+}
+
+async function pageAnnouncements(){
+ const data=await api('pengumuman');
+ document.getElementById('pageContent').innerHTML=
+ pageHead('Pengumuman','Informasi terbaru CBT SPADA.')+
+ (currentUser.role!=='siswa'?`<div class="panel"><h3>Buat Pengumuman</h3>
+ <form id="announcementForm"><div class="field"><label>Judul</label><input name="judul" required></div>
+ <div class="field"><label>Isi</label><textarea name="isi" rows="3" required></textarea></div>
+ <button class="btn">Terbitkan</button></form></div>`:'')+
+ data.map(p=>`<div class="panel"><h3>${esc(p.judul)}</h3><p style="line-height:1.7;color:#65738a">${esc(p.isi)}</p><small>${formatDate(p.tanggal)}</small></div>`).join('')+
+ (!data.length?'<div class="panel empty">Belum ada pengumuman.</div>':'');
+ const form=document.getElementById('announcementForm');
+ if(form)form.onsubmit=async e=>{
+  e.preventDefault();const data=Object.fromEntries(new FormData(form).entries());
+  try{await api('buatPengumuman',data);toast('Pengumuman diterbitkan.');pageAnnouncements();}
+  catch(err){toast(err.message);}
+ };
+}
+
+async function logout(){
+ try{await api('logout');}catch(e){}
+ authToken='';currentUser=null;
+ sessionStorage.removeItem('cbt_token');
+ document.getElementById('app').classList.add('hidden');
+ document.getElementById('loginPage').classList.remove('hidden');
+ document.getElementById('password').value='';
+}
+
+async function init(){
+ if(!authToken)return;
+ try{
+  currentUser=await api('me');
+  showApp();
+ }catch(e){
+  authToken='';sessionStorage.removeItem('cbt_token');
+ }
+}
+init();
+</script>
+</body>
+</html>
